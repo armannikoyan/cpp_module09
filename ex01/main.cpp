@@ -1,32 +1,32 @@
-
-:/* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anikoyan <anikoyan@student.42yerevan.am>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/15 03:03:40 by anikoyan          #+#    #+#             */
-/*   Updated: 2025/10/15 04:21:24 by anikoyan         ###   ########.fr       */
+/*   Created: 2025/10/15 13:26:49 by anikoyan          #+#    #+#             */
+/*   Updated: 2025/10/16 01:33:47 by anikoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "BitcoinExchange.hpp"
+#include "RPN.hpp"
 
 int main(int argc, char** argv)
 {
-	if (argc < 2)
-		std::cerr << "Error: could not open file." << std::endl;
-	else if (argc > 2)
-		std::cerr << "Error\nUsage: ./btc file_name" << std::endl;
-	else
+	if (argc != 2)
 	{
-		try
-		{
-			BitcoinExchange btc;
-			btc.calculateAssets(argv[1]);
-		} catch (const std::exception& ex) {
-			std::cerr << "Unexpected error: " << ex.what() << std::endl;
-		}
+		std::cerr << "Error: wrong usage. [./RPN \"8 9 * 9 - 9 - 9 - 4 - 1 +\"]"
+			<< std::endl;
+
+		return -1;
+	}
+
+	try
+	{
+		RPN rpn;
+		std::cout << rpn.calculateExpression(argv[1]) << std::endl;
+	} catch (const std::exception& ex) {
+		std::cerr << "Unexpected error: " << ex.what() << std::endl;
 	}
 }
