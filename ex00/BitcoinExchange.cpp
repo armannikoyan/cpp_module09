@@ -6,11 +6,13 @@
 /*   By: anikoyan <anikoyan@student.42yerevan.am>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 02:45:10 by anikoyan          #+#    #+#             */
-/*   Updated: 2025/10/15 04:41:40 by anikoyan         ###   ########.fr       */
+/*   Updated: 2025/10/22 18:40:15 by anikoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
+#include <cstdlib>
+#include <iterator>
 
 static std::string trim(const std::string& source)
 {
@@ -77,6 +79,24 @@ void BitcoinExchange::calculateAssets(const std::string& file_path) const
 		if ((pos = line.find("|", 0)) != std::string::npos)
 		{
 			std::string date = trim(line.substr(0, pos));
+
+			size_t dash1 = date.find('-');
+			size_t dash2 = date.find('-', dash1 + 1);
+
+			if (dash1 == std::string::npos || dash2 == std::string::npos) {
+				std::cerr << "Error: bad input => " << date << std::endl;
+				continue;
+			}
+
+			int year  = atoi(date.substr(0, dash1).c_str());
+			int month = atoi(date.substr(dash1 + 1, dash2 - dash1 - 1).c_str());
+			int day   = atoi(date.substr(dash2 + 1).c_str());
+
+			if (year < 0 || month < 1 || month > 12 || day < 1 || day > 31) {
+				std::cerr << "Error: bad input => " << date << std::endl;
+				continue;
+			}
+
 			float amount = atof(line.substr(++pos, std::string::npos).c_str());
 			if (amount < 0)
 			{
